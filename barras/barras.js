@@ -92,6 +92,6 @@ class BarrasJs {
 
 window.onload = async () => {
     const app1 = new BarrasJs({ width: 700, height: 500 });
-    await app1.run("#main", "superstore.json");
+    await app1.run("#main", "../superstore.json");
 
 };
