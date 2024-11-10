@@ -1,0 +1,43 @@
+circle {
+    stroke: 3px solid rgb(0, 0, 0);
+}
+
+.tick line{
+    stroke: gray;
+}
+
+#main {
+    border: 1px solid rgb(160, 8, 8);
+    display:  flex;
+}
+
+svg {
+    /* margin: 0 auto; */
+}
+
+.legenda {
+    border: 0px solid rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    /* margin-top: 500px; */
+    margin-left: 10px;
+    margin-right: 5px;
+}
+.legenda div {
+    display: flex;
+    align-items: center;
+    border: 0px solid rgb(26, 97, 29);
+    height: 25px;
+}
+
+.legenda p {
+    font-size: 12px;
+    border: 0px solid rgb(0, 0, 0);
+}
+.legenda span {
+    height: 15px;
+    width: 15px;
+    border-radius: 10px;
+    border: 1px solid rgb(0, 0, 0);
+    margin-left: auto;
+}
