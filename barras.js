@@ -94,12 +94,4 @@ window.onload = async () => {
     const app1 = new BarrasJs({ width: 700, height: 500 });
     await app1.run("#main", "superstore.json");
 
-    // Para criar outra instância em outro elemento com dados dinâmicos:
-    const app2 = new BarrasJs({ width: 500, height: 400, margin: { top: 20, right: 20, bottom: 80, left: 40 } });
-    await app2.run("#secondary", "outroArquivo.json");
-
-    // Para atualizar dados dinamicamente:
-    setTimeout(() => {
-        app1.updateData([{ product: "Product A", quantity: 100 }, { product: "Product B", quantity: 200 }]);
-    }, 3000);
 };
