@@ -17,11 +17,6 @@ class GraficoDispersao {
   createSvg() {
     this.svg = d3.select(this.config.div)
       .append("svg")
-      // .attr('x', 10)
-      // .attr('y', 10)
-      // .attr('width', this.config.width + this.config.left + this.config.right)
-      // .attr('height', this.config.height + this.config.top + this.config.bottom)
-      // .attr("max-width", this.config.width)
       .attr("viewBox", [0, 0, this.config.width + this.config.left + this.config.right , this.config.height + this.config.top + this.config.bottom])
       .style("max-width", `${this.config.width}px`)
       // .style("border", "1px solid black");
@@ -72,24 +67,12 @@ class GraficoDispersao {
 
     this.colScale = d3.scaleSequential(d3.interpolateOrRd).domain(colExtent);
     this.catScale = d3.scaleOrdinal().domain(catExtent).range(d3.schemeTableau10);
-    // const categorias = this.catScale.domain(); // Obtém as categorias definidas no domínio
-    // categorias.forEach(categoria => {
-    //     const cor = this.catScale(categoria); // Obtém a cor associada a cada categoria
-    //     console.log(`Categoria: ${categoria}, Cor: ${cor}`);
-    // });
   }
 
   createAxis() {
     let xAxis = d3.axisBottom(this.intervaloX.copy().interpolate(d3.interpolateRound))
 
     let yAxis = d3.axisLeft(this.intervaloY.copy().interpolate(d3.interpolateRound))
-
-    // let xExtent = d3.extent(this.circulos, d => {
-    //   return d.cx;
-    // });
-    // let yExtent = d3.extent(this.circulos, d => {
-    //   return d.cy;
-    // });
 
     this.margens
       .append("g")
@@ -121,13 +104,6 @@ class GraficoDispersao {
           .attr("text-anchor", "start")
           .attr("font-weight", "bold")
           .text("Valor da venda"));
-
-    // this.margens.append("line")
-    //   .attr("stroke", "currentColor")
-    //   .attr("x1", this.intervaloX(xExtent[0]))
-    //   .attr("x2", this.intervaloX(xExtent[1]))
-    //   .attr("y1", this.intervaloY(yExtent[0]))
-    //   .attr("y2", this.intervaloY(yExtent[1]));
   }
 
   renderCircles() {
@@ -139,7 +115,6 @@ class GraficoDispersao {
       .attr('r' , d => d.r)
       .attr('fill', d => this.colScale(d.col))
       .attr('stroke', 'black')
-      // .attr('fill', d => this.catScale(d.cat));
   }
 }
 

@@ -1,5 +1,5 @@
 class BarrasJs {
-    constructor({ width = 800, height = 600, margin = { top: 20, right: 30, bottom: 200, left: 100 } } = {}) {
+    constructor({ width = 800, height = 600, margin = { top: 20, right: 30, bottom: 250, left: 300 } } = {}) {
         this.w = width;
         this.h = height;
         this.margin = margin;
@@ -82,7 +82,7 @@ class BarrasJs {
 }
 
 window.onload = async () => {
-    const app1 = new BarrasJs({ width: 700, height: 500 });
+    const app1 = new BarrasJs({ width: 800, height: 600 });
     await app1.run("#main", "../superstore.json");
 
 };

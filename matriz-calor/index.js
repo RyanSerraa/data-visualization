@@ -153,17 +153,6 @@ class GraficoMatrizCalor {
 
       
     }
-  
-    renderCircles() {
-      this.svg.selectAll('circle')
-        .data(this.data)
-        .join('circle')
-        .attr('cx', d => this.x(d.cx))
-        .attr('cy', d => this.y(d.cy))
-        .attr('r' , d => d.r)
-        .attr('fill', d => this.colors(d.sales))
-        .attr('stroke', 'black')
-    }
   }
   
   
