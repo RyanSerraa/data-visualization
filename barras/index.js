@@ -1,5 +1,5 @@
 class BarrasJs {
-    constructor({ width = 800, height = 600, margin = { top: 20, right: 30, bottom: 100, left: 50 } } = {}) {
+    constructor({ width = 800, height = 600, margin = { top: 20, right: 150, bottom: 250, left: 300 } } = {}) {
         this.w = width;
         this.h = height;
         this.margin = margin;
@@ -15,47 +15,45 @@ class BarrasJs {
     }
 
     async loadJson(file) {
-        // Carregar o JSON e mapear os dados
         const rawData = await d3.json(file);
         this.data = rawData.map(d => ({
             product: d["Product Name"],
             quantity: +d.Quantity || 0
         }));
 
-        // Filtrar produtos sem quantidade e pegar os 10 produtos com maiores quantidades, com valores distintos
+        this.data = this.data.filter(d => d.quantity > 0);
+
+        const randomIndex = Math.floor(Math.random() * (this.data.length - 10)); 
+        this.data = this.data.slice(randomIndex, randomIndex + 10); 
+
         const uniqueQuantities = new Set();
-        this.data = this.data
-            .filter(d => d.quantity > 0)
-            .sort((a, b) => b.quantity - a.quantity)
-            .filter(d => {
-                if (!uniqueQuantities.has(d.quantity)) {
-                    uniqueQuantities.add(d.quantity);
-                    return true;
-                }
-                return false;
-            })
-            .slice(0, 10);
+        this.data = this.data.sort((a, b) => b.quantity - a.quantity).filter(d => {
+            if (!uniqueQuantities.has(d.quantity)) {
+                uniqueQuantities.add(d.quantity);
+                return true;
+            }
+            return false;
+        });
     }
+
 
     drawChart() {
         const width = this.w - this.margin.left - this.margin.right;
         const height = this.h - this.margin.top - this.margin.bottom;
-
+    
         const xScale = d3.scaleBand()
             .domain(this.data.map(d => d.product))
             .range([0, width])
             .padding(0.1);
-
+    
         const yScale = d3.scaleLinear()
             .domain([0, d3.max(this.data, d => d.quantity)])
             .nice()
             .range([height, 0]);
-
-        // Adicionar grupo de barras
+    
         const g = this.svg.append("g")
             .attr("transform", `translate(${this.margin.left},${this.margin.top})`);
-
-        // Adicionar barras
+    
         g.selectAll("rect")
             .data(this.data)
             .join("rect")
@@ -64,23 +62,35 @@ class BarrasJs {
             .attr("width", xScale.bandwidth())
             .attr("height", d => height - yScale(d.quantity))
             .style("fill", "RoyalBlue");
-
-        // Adicionar eixos
+    
+        // Eixo X
         g.append("g")
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(xScale))
             .selectAll("text")
             .attr("transform", "rotate(-45)")
             .style("text-anchor", "end");
-
+    
+        // Eixo Y
         g.append("g")
             .call(d3.axisLeft(yScale));
-    }
-
-    updateData(newData) {
-        this.data = newData;
-        this.svg.selectAll("*").remove();  // Limpar SVG para atualização
-        this.drawChart();
+    
+        // Rótulo do eixo X
+        this.svg.append("text")
+            .attr("x", this.margin.left + width +25)
+            .attr("y", this.h - this.margin.bottom )
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text("Produtos");
+    
+        // Rótulo do eixo Y
+        this.svg.append("text")
+            .attr("x", -(this.margin.top + height / 2))
+            .attr("y", this.margin.left - 60)
+            .attr("transform", "rotate(-90)")
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text("Quantidade");
     }
 
     async run(selector, file) {
@@ -91,7 +101,7 @@ class BarrasJs {
 }
 
 window.onload = async () => {
-    const app1 = new BarrasJs({ width: 700, height: 500 });
+    const app1 = new BarrasJs({ width: 800, height: 600 });
     await app1.run("#main", "../superstore.json");
 
 };
