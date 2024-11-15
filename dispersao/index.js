@@ -33,21 +33,23 @@ class GraficoDispersao {
     this.margens = this.svg
       .append('g')
   }
-
   async loadJSON(file) {
     this.circulos = await d3.json(file);
+
     this.circulos = this.circulos.map(d => {
-      return {
-        cx: +d.Profit,
-        cy: +d.Sales,
-        col: d.Discount,
-        cat: d.Category,
-        r: 4
-      }
+        return {
+            cx: +d.Profit,
+            cy: +d.Sales,
+            col: d.Discount,
+            cat: d.Category,
+            r: 4
+        };
     });
 
-    this.circulos = this.circulos.slice(0, 1000);
-  }
+    const randomStart = Math.floor(Math.random() * Math.max(0, this.circulos.length - 1000));
+    this.circulos = this.circulos.slice(randomStart, randomStart + 1000);
+}
+
 
   createScales() {
     let xExtent = d3.extent(this.circulos, d => {
