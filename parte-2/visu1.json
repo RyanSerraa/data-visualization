@@ -1,0 +1,40 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {
+            "url": "dump.json"
+    },
+    "transform": [
+      {
+        "calculate": "datetime(datum['PartidaReal']) - datetime(datum['PartidaPrevista'])",
+        "as": "delay"
+      },
+      {
+        "calculate": "datum.delay > 5 * 60 * 1000 ? 1 : 0",
+        "as": "isDelayed"
+      },
+      {
+        "aggregate": [
+          {"op": "sum", "field": "isDelayed", "as": "delayedCount"},
+          {"op": "count", "as": "totalCount"}
+        ],
+        "groupby": ["AeroportoOrigem"]
+      },
+      {
+        "calculate": "datum.totalCount > 0 ? (datum.delayedCount / datum.totalCount) * 100 : 0",
+        "as": "delayRate"
+      },
+      {"sort": [{"field": "delayRate", "order": "descending"}]},
+      {"window": [{"op": "rank", "as": "rank"}]},
+      {"filter": "datum.rank <= 10"}
+    ],
+    "mark": "bar",
+    "encoding": {
+      "x": {"field": "AeroportoOrigem", "type": "nominal", "title": "Aeroporto"},
+      "y": {"field": "delayRate", "type": "quantitative", "title": "Taxa de Atraso (%)"},
+      "color": {"field": "AeroportoOrigem", "type": "nominal", "legend": null},
+      "tooltip": [
+        {"field": "AeroportoOrigem", "type": "nominal", "title": "Aeroporto"},
+        {"field": "delayRate", "type": "quantitative", "title": "Taxa de Atraso (%)"}
+      ]
+    }
+  }
