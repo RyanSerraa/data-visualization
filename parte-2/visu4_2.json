@@ -1,0 +1,41 @@
+{
+  "title": "Total de voos cancelados por mês",
+  "data": {
+    "url": "dump.json"
+  },
+  "transform": [
+    {
+      "filter": "datum.SituacaoVoo == 'Cancelado'"
+    },
+    {
+      "calculate": "month(datum.ChegadaPrevista) + 1",
+      "as": "month"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "count",
+          "field": "AeroportoOrigem",
+          "as": "total_value"
+        }
+      ],
+      "groupby": ["month"]
+    }
+  ],
+  "mark": "bar",
+  "encoding": {
+    "x": {
+      "field": "month",
+      "type": "ordinal",
+      "title": "Mês"
+    },
+    "y": {
+      "field": "total_value",
+      "type": "quantitative",
+      "title": "Total de voos cancelados"
+    },
+    "tooltip": [
+      { "field": "total_value", "type": "quantitative", "title": "Total" }
+    ]
+  }
+}

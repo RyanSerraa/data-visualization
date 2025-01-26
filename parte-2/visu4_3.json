@@ -1,0 +1,49 @@
+{
+  "title": "Total de voos atrasados por mês",
+  "data": {
+    "url": "dump.json"
+  },
+  "transform": [
+    {
+      "filter": "datum.SituacaoVoo == 'Realizado'"
+    },
+    {
+      "calculate": "month(datum.PartidaReal) + 1",
+      "as": "month"
+    },
+    {
+      "calculate": "datetime(datum['PartidaReal']) - datetime(datum['PartidaPrevista'])",
+      "as": "delay"
+    },
+    {
+      "calculate": "datum.delay > 5 * 60 * 1000 ? 1 : 0",
+      "as": "isDelayed"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "sum",
+          "field": "isDelayed",
+          "as": "total_value"
+        }
+      ],
+      "groupby": ["month"]
+    }
+  ],
+  "mark": "bar",
+  "encoding": {
+    "x": {
+      "field": "month",
+      "type": "ordinal",
+      "title": "Mês"
+    },
+    "y": {
+      "field": "total_value",
+      "type": "quantitative",
+      "title": "Total de voos atrasados"
+    },
+    "tooltip": [
+      { "field": "total_value", "type": "quantitative", "title": "Total" }
+    ]
+  }
+}
