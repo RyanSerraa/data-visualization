@@ -1,0 +1,110 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Top 10 Aeroportos com Maior Taxa de Cancelamento (%)",
+    "data": {
+      "url": "dump.json"
+    },
+    "transform": [
+      {
+        "filter": "datum.SituacaoVoo === 'Cancelado'"
+      },
+      {
+        "aggregate": [
+          {
+            "op": "count",
+            "as": "VoosCancelados"
+          }
+        ],
+        "groupby": ["AeroportoOrigem"]
+      },
+      {
+        "joinaggregate": [
+          {
+            "op": "count",
+            "as": "TotalVoos"
+          }
+        ],
+        "groupby": ["AeroportoOrigem"]
+      },
+      {
+        "calculate": "datum.VoosCancelados / datum.TotalVoos * 100",
+        "as": "TaxaCancelamento"
+      },
+      {
+        "filter": "datum.TotalVoos > 0"
+      },
+      {
+        "window": [
+          {
+            "op": "rank",
+            "as": "Rank"
+          }
+        ],
+        "sort": [
+          {
+            "field": "TaxaCancelamento",
+            "order": "descending"
+          }
+        ]
+      },
+      {
+        "filter": "datum.Rank <= 10"
+      }
+    ],
+    "mark": {
+      "type": "point",
+      "filled": true,
+      "opacity": 0.7
+    },
+    "encoding": {
+      "x": {
+        "field": "AeroportoOrigem",
+        "type": "nominal",
+        "axis": {"labelAngle": -45},
+        "title": "Aeroporto de Origem"
+      },
+      "y": {
+        "field": "TaxaCancelamento",
+        "type": "quantitative",
+        "title": "Taxa de Cancelamento (%)",
+        "axis": {
+          "format": ".1f"
+        }
+      },
+      "size": {
+        "field": "TotalVoos",
+        "type": "quantitative",
+        "scale": {
+          "range": [100, 1000]
+        },
+        "title": "Total de Voos"
+      },
+      "color": {
+        "field": "AeroportoOrigem",
+        "type": "nominal",
+        "legend": null
+      },
+      "tooltip": [
+        {"field": "AeroportoOrigem", "type": "nominal", "title": "Aeroporto"},
+        {
+          "field": "TaxaCancelamento",
+          "type": "quantitative",
+          "format": ".2f",
+          "title": "Taxa de Cancelamento (%)"
+        },
+        {
+          "field": "VoosCancelados",
+          "type": "quantitative",
+          "title": "Vôos Cancelados"
+        },
+        {
+          "field": "TotalVoos",
+          "type": "quantitative",
+          "title": "Total de Voos"
+        }
+      ]
+    },
+    "width": 600,
+    "height": 400
+  }
+  
