@@ -1,5 +1,5 @@
 {
-  "title": "Top 10 aeroportos com maior taxa de atraso",
+  "title": "Tempo médio de atraso para os 10 aeroportos com maior taxa de atraso",
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "data": {
     "url": "dump.json"
@@ -17,9 +17,14 @@
       "as": "isDelayed"
     },
     {
+      "calculate": "datum.delay > 5 * 60 * 1000 ? datum.delay/60000 : 0",
+      "as": "meanDelay"
+    },
+    {
       "aggregate": [
         { "op": "sum", "field": "isDelayed", "as": "delayedCount" },
-        { "op": "count", "as": "totalCount" }
+        { "op": "count", "as": "totalCount" },
+        { "op": "mean", "field": "meanDelay", "as": "meanDelay" }
       ],
       "groupby": ["AeroportoOrigem"]
     },
@@ -36,14 +41,14 @@
     "x": {
       "field": "AeroportoOrigem",
       "type": "nominal",
+      "axis": { "labelAngle": -45 },
       "title": "Aeroporto",
-      "sort": "-y",
-      "axis": { "labelAngle": -45 }
+      "sort": { "field": "delayRate", "order": "descending" }
     },
     "y": {
-      "field": "delayRate",
+      "field": "meanDelay",
       "type": "quantitative",
-      "title": "Taxa de Atraso (%)"
+      "title": "Atraso médio (min)"
     },
     "color": { "field": "AeroportoOrigem", "type": "nominal", "legend": null },
     "tooltip": [
@@ -63,6 +68,12 @@
         "field": "totalCount",
         "type": "quantitative",
         "title": "Total de Voos"
+      },
+      {
+        "field": "meanDelay",
+        "type": "quantitative",
+        "title": "Tempo médio de atraso (min)",
+        "format": ".0f"
       }
     ]
   },

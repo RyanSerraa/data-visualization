@@ -32,18 +32,16 @@
       "calculate": "(datum.TotalCancelados / datum.TotalVoos ) * 100",
       "as": "TaxaCancelamento"
     },
+    { "sort": [{ "field": "TaxaCancelamento", "order": "descending" }] },
     {
       "window": [
         {
           "op": "rank",
           "as": "rank"
         }
-      ],
-      "sort": [{ "field": "TaxaCancelamento", "order": "descending" }]
+      ]
     },
-    {
-      "filter": "datum.rank <= 10"
-    }
+    { "filter": "datum.rank <= 10" }
   ],
   "mark": {
     "type": "point",
@@ -55,7 +53,8 @@
       "field": "AeroportoOrigem",
       "type": "nominal",
       "axis": { "labelAngle": -45 },
-      "title": "Aeroportos"
+      "title": "Aeroportos",
+      "sort": "-y"
     },
     "y": {
       "field": "TaxaCancelamento",
@@ -86,6 +85,6 @@
       }
     ]
   },
-  "width": 400,
-  "height": 250
+  "width": 600,
+  "height": 400
 }
