@@ -1,6 +1,6 @@
 {
-  "title": "Top 10 aeroportos com maior taxa de atraso",
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Top 10 aeroportos com maior taxa de atraso",
   "data": {
     "url": "dump.json"
   },
@@ -31,41 +31,76 @@
     { "window": [{ "op": "rank", "as": "rank" }] },
     { "filter": "datum.rank <= 10" }
   ],
-  "mark": "bar",
-  "encoding": {
-    "x": {
-      "field": "AeroportoOrigem",
-      "type": "nominal",
-      "title": "Aeroporto",
-      "sort": "-y",
-      "axis": { "labelAngle": -45 }
-    },
-    "y": {
-      "field": "delayRate",
-      "type": "quantitative",
-      "title": "Taxa de Atraso (%)"
-    },
-    "color": { "field": "AeroportoOrigem", "type": "nominal", "legend": null },
-    "tooltip": [
-      { "field": "AeroportoOrigem", "type": "nominal", "title": "Aeroporto" },
-      {
-        "field": "delayRate",
-        "type": "quantitative",
-        "title": "Taxa de Atraso (%)",
-        "format": ".2f"
+  "vconcat": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "AeroportoOrigem",
+          "type": "nominal",
+          "title": "Aeroporto",
+          "sort": "-y",
+          "axis": { "labelAngle": -45 }
+        },
+        "y": {
+          "field": "delayRate",
+          "type": "quantitative",
+          "title": "Taxa de Atraso (%)"
+        },
+        "color": { "field": "AeroportoOrigem", "type": "nominal", "legend": null },
+        "tooltip": [
+          { "field": "AeroportoOrigem", "type": "nominal", "title": "Aeroporto" },
+          {
+            "field": "delayRate",
+            "type": "quantitative",
+            "title": "Taxa de Atraso (%)",
+            "format": ".2f"
+          },
+          {
+            "field": "delayedCount",
+            "type": "quantitative",
+            "title": "Total de Voos Atrasados"
+          },
+          {
+            "field": "totalCount",
+            "type": "quantitative",
+            "title": "Total de Voos"
+          }
+        ]
       },
-      {
-        "field": "delayedCount",
-        "type": "quantitative",
-        "title": "Total de Voos Atrasados"
-      },
-      {
-        "field": "totalCount",
-        "type": "quantitative",
-        "title": "Total de Voos"
-      }
-    ]
-  },
-  "width": 500,
-  "height": 300
+      "width": 500,
+      "height": 300
+    },
+    {
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "fill": "#f0f0f0",
+            "stroke": "#ccc",
+            "strokeWidth": 1,
+            "cornerRadius": 5
+          },
+          "encoding": {
+            "x": { "value": 0 },
+            "y": { "value": 0 },
+            "width": { "value": 500 },
+            "height": { "value": 120 }
+          }
+        },
+        {
+          "mark": { "type": "text", "align": "left", "baseline": "top", "lineBreak": "\n" },
+          "encoding": {
+            "text": {
+              "value": "A motivação da escolha da primeira visualização é porque o gráfico de barras consegue descrever melhor para \n o usuário a relação de grandeza, e por estar na ordem decrescente, fica mais evidente a ideia de rank.\n \n \n Com esse gráfico podemos obter as informações sobre os aeroportos que tem mais voos atrasados com base na taxa,\n onde é levado em consideração principalmente a relação de total de voos atrasados / voos totais de cada aeroporto.\nCom isso, podemos notar que o aeroporto Houston tem a maior taxa de cancelamento em comparação aos outros,\n porém não é o aeroporto com mais voos atrasados."
+            },
+            "x": { "value": 10 },
+            "y": { "value": 10 }
+          }
+        }
+      ],
+      "width": 600,
+      "height": 150
+    }
+  ]
 }
