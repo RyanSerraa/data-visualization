@@ -70,17 +70,24 @@
           }
         },
         {
-          "mark": { "type": "text", "align": "left", "baseline": "top", "lineBreak": "\n" },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "fontSize": 13,
+            "fontWeight": "normal",
+            "baseline": "top",
+            "lineBreak": "\n"
+          },
           "encoding": {
             "text": {
-              "value": "A motivação de escolha do grafico de barras foi exatamente, por nos dar uma melhor visualização de grandeza então conseguimos nesse caso visualizar qual\n foi o mês que obteve a maior quantidade de voos realizados em cada mês. \n \nCom base nesse grafico podemos identificar que o mês 1 ou janeiro como preferir teve a maior quantidade de voos realizados em todo o ano."
+              "value": "A motivação de escolha do grafico de barras foi exatamente, por nos dar uma melhor visualização\nde grandeza então conseguimos nesse caso visualizar qual foi o mês que obteve a maior quantidade\nde voos atrasados. \n \nCom base nesse grafico podemos identificar que o mês 1, ou janeiro como preferir, teve a maior\nquantidade de voos atrasados nos 3 anos (2015, 2016 e 2017)."
             },
             "x": { "value": 10 },
             "y": { "value": 10 }
           }
         }
       ],
-      "width": 800,
+      "width": 600,
       "height": 150
     }
   ]

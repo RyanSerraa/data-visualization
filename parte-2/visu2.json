@@ -6,85 +6,119 @@
   },
   "transform": [
     {
-      "joinaggregate": [
+      "aggregate": [
         {
           "op": "count",
-          "field": "Voos",
-          "as": "TotalVoos"
+          "as": "TotalRealizados"
         }
       ],
+      "groupby": ["AeroportoOrigem", "SituacaoVoo"]
+    },
+    {
+      "pivot": "SituacaoVoo",
+      "value": "TotalRealizados",
       "groupby": ["AeroportoOrigem"]
     },
     {
-      "filter": "datum.SituacaoVoo == 'Cancelado'"
+      "calculate": "datum.Realizado + datum.Cancelado",
+      "as": "TotalVoos"
     },
     {
-      "joinaggregate": [
-        {
-          "op": "count",
-          "field": "Voos",
-          "as": "TotalCancelados"
-        }
-      ],
-      "groupby": ["AeroportoOrigem"]
-    },
-    {
-      "calculate": "(datum.TotalCancelados / datum.TotalVoos ) * 100",
+      "calculate": "datum.TotalVoos > 49 ? (datum.Cancelado / datum.TotalVoos) * 100 : 0",
       "as": "TaxaCancelamento"
     },
-    { "sort": [{ "field": "TaxaCancelamento", "order": "descending" }] },
     {
-      "window": [
-        {
-          "op": "rank",
-          "as": "rank"
-        }
-      ]
+      "window": [{ "op": "rank", "as": "rank" }],
+      "sort": [{ "field": "TaxaCancelamento", "order": "descending" }]
     },
     { "filter": "datum.rank <= 10" }
   ],
-  "mark": {
-    "type": "point",
-    "filled": true,
-    "opacity": 0.9
-  },
-  "encoding": {
-    "x": {
-      "field": "AeroportoOrigem",
-      "type": "nominal",
-      "axis": { "labelAngle": -45 },
-      "title": "Aeroportos",
-      "sort": "-y"
-    },
-    "y": {
-      "field": "TaxaCancelamento",
-      "type": "quantitative",
-      "title": "Taxa de cancelamento %"
-    },
-    "color": {
-      "field": "TaxaCancelamento",
-      "type": "quantitative",
-      "scale": {
-        "domain": [0, 100],
-        "range": ["yellow", "blue"]
-      }
-    },
-    "tooltip": [
-      { "field": "AeroportoOrigem", "type": "nominal", "title": "Aeroporto" },
-      {
-        "field": "TotalCancelados",
-        "type": "quantitative",
-        "title": "Total de Cancelados"
+  "vconcat": [
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 100
       },
-      { "field": "TotalVoos", "type": "nominal", "title": "Total de Voos" },
-      {
-        "field": "TaxaCancelamento",
-        "type": "nominal",
-        "title": "Taxa de cancelamento %",
-        "format": ".2f"
-      }
-    ]
-  },
-  "width": 600,
-  "height": 400
+      "encoding": {
+        "x": {
+          "field": "AeroportoOrigem",
+          "type": "nominal",
+          "axis": { "labelAngle": -45 },
+          "title": "Aeroportos",
+          "sort": "-y"
+        },
+        "y": {
+          "field": "TaxaCancelamento",
+          "type": "quantitative",
+          "title": "Taxa de cancelamento %"
+        },
+        "color": {
+          "field": "TaxaCancelamento",
+          "type": "quantitative",
+          "scale": {
+            "domain": [0, 40],
+            "range": ["yellow", "blue"]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "AeroportoOrigem",
+            "type": "nominal",
+            "title": "Aeroporto"
+          },
+          {
+            "field": "Cancelado",
+            "type": "quantitative",
+            "title": "Total de Cancelados"
+          },
+          { "field": "TotalVoos", "type": "nominal", "title": "Total de Voos" },
+          {
+            "field": "TaxaCancelamento",
+            "type": "nominal",
+            "title": "Taxa de cancelamento %",
+            "format": ".2f"
+          }
+        ]
+      },
+      "width": 600,
+      "height": 400
+    },
+    {
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "fill": "#f0f0f0",
+            "stroke": "#ccc",
+            "strokeWidth": 1,
+            "cornerRadius": 5
+          },
+          "encoding": {
+            "x": { "value": 0 },
+            "y": { "value": 0 },
+            "width": { "value": 500 },
+            "height": { "value": 120 }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "lineBreak": "\n"
+          },
+          "encoding": {
+            "text": {
+              "value": "A motivação da escolha dessa visualização é porquê o usuário consegue ver a relação de grandeza e ranking nesse gráfico,\n onde é visível que Belo Horizonte é o que tem a maior taxa de cancelamento e passando o mouse por cima das bolinhas,\n é possível obter mais informações.\n \n \n Com esse gráfico, analisando apenas os aeroportos que fizeram pelo menos 50 vôos, podemos obter as informações sobre\n os aeroportos que tem mais vôos cancelados com base na taxa, onde é levado em consideração principalmente a relação\n de total de vôos cancelados / vôos totais de cada aeroporto.\n Com isso, podemos notar que o aeroporto Belo Horizonte tem a maior taxa de cancelamento em comparação aos outros,\nalém de ser o aeroporto com mais vôos cancelados."
+            },
+            "x": { "value": 10 },
+            "y": { "value": 10 }
+          }
+        }
+      ],
+      "width": 600,
+      "height": 150
+    }
+  ]
 }

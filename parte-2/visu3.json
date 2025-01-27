@@ -29,11 +29,13 @@
       "groupby": ["AeroportoOrigem"]
     },
     {
-      "calculate": "datum.totalCount > 0 ? (datum.delayedCount / datum.totalCount) * 100 : 0",
+      "calculate": "datum.totalCount > 49 ? (datum.delayedCount / datum.totalCount) * 100 : 0",
       "as": "delayRate"
     },
-    { "sort": [{ "field": "delayRate", "order": "descending" }] },
-    { "window": [{ "op": "rank", "as": "rank" }] },
+    {
+      "sort": [{ "field": "delayRate", "order": "descending" }],
+      "window": [{ "op": "rank", "as": "rank" }]
+    },
     { "filter": "datum.rank <= 10" }
   ],
   "vconcat": [
@@ -52,9 +54,17 @@
           "type": "quantitative",
           "title": "Atraso médio (min)"
         },
-        "color": { "field": "AeroportoOrigem", "type": "nominal", "legend": null },
+        "color": {
+          "field": "AeroportoOrigem",
+          "type": "nominal",
+          "legend": null
+        },
         "tooltip": [
-          { "field": "AeroportoOrigem", "type": "nominal", "title": "Aeroporto" },
+          {
+            "field": "AeroportoOrigem",
+            "type": "nominal",
+            "title": "Aeroporto"
+          },
           {
             "field": "delayRate",
             "type": "quantitative",
@@ -100,10 +110,15 @@
           }
         },
         {
-          "mark": { "type": "text", "align": "left", "baseline": "top", "lineBreak": "\n" },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "lineBreak": "\n"
+          },
           "encoding": {
             "text": {
-              "value": "A motivação da escolha dessa visualização é porquê o gráfico de barras consegue descrever melhor para o usuário a relação de quantidade, onde o \n tamanho da barra é de acordo o atraso médio em minutos. Ou seja, quanto maior for o atraso em minutos, maior será o tamanho da barra e vice-versa.\n\nCom esse gráfico podemos obter as informações sobre os aeroportos que tem maior atraso médio por minutos, onde é feito uma média de todos os minutos \n acrescido para cada aeroporto. Com isso, podemos notar que o aeroporto Houston tem o maior atraso médio em minutos em comparação aos outros."
+              "value": "A motivação da escolha dessa visualização é porquê o gráfico de barras consegue descrever melhor para o usuário a relação de quantidade, onde o \n tamanho da barra é de acordo o atraso médio em minutos. Ou seja, quanto maior for o atraso em minutos, maior será o tamanho da barra e vice-versa.\n\nCom esse gráfico, analisando apenas os aeroportos que fizeram pelo menos 50 vôos, podemos obter as informações sobre os aeroportos que tem maior\n atraso médio por minutos, onde é feito uma média de todos os minutos acrescido para cada aeroporto. Com isso, podemos notar que o aeroporto\n Newark / Intl Nj tem o maior atraso médio em minutos em comparação aos outros. Ou seja, o aeroporto com mais vôos atrasados (Roma) não é \no aeroporto que tem a maior média de atraso em minutos."
             },
             "x": { "value": 10 },
             "y": { "value": 10 }
