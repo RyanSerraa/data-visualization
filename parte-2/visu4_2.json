@@ -22,20 +22,55 @@
       "groupby": ["month"]
     }
   ],
-  "mark": "bar",
-  "encoding": {
-    "x": {
-      "field": "month",
-      "type": "ordinal",
-      "title": "Mês"
+  "vconcat": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "month",
+          "type": "ordinal",
+          "title": "Mês"
+        },
+        "y": {
+          "field": "total_value",
+          "type": "quantitative",
+          "title": "Total de voos cancelados"
+        },
+        "tooltip": [
+          { "field": "total_value", "type": "quantitative", "title": "Total" }
+        ]
+      }
     },
-    "y": {
-      "field": "total_value",
-      "type": "quantitative",
-      "title": "Total de voos cancelados"
-    },
-    "tooltip": [
-      { "field": "total_value", "type": "quantitative", "title": "Total" }
-    ]
-  }
+    {
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "fill": "#f0f0f0",
+            "stroke": "#ccc",
+            "strokeWidth": 1,
+            "cornerRadius": 5
+          },
+          "encoding": {
+            "x": { "value": 0 },
+            "y": { "value": 0 },
+            "width": { "value": 500 },
+            "height": { "value": 120 }
+          }
+        },
+        {
+          "mark": { "type": "text", "align": "left", "baseline": "top", "lineBreak": "\n" },
+          "encoding": {
+            "text": {
+              "value": "A motivação de escolha do grafico de barras foi exatamente, por nos dar uma melhor visualização de grandeza então conseguimos nesse caso visualizar qual \n foi o mês  que obteve a maior quantidade de voos cancelados em cada mês.\n\nCom base nesse grafico podemos identificar que o mês 4 ou abril como preferir teve a maior quantidade de voos cancelados em todo o ano."
+            },
+            "x": { "value": 10 },
+            "y": { "value": 10 }
+          }
+        }
+      ],
+      "width": 800,
+      "height": 150
+    }
+  ]
 }
