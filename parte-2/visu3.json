@@ -36,47 +36,82 @@
     { "window": [{ "op": "rank", "as": "rank" }] },
     { "filter": "datum.rank <= 10" }
   ],
-  "mark": "bar",
-  "encoding": {
-    "x": {
-      "field": "AeroportoOrigem",
-      "type": "nominal",
-      "axis": { "labelAngle": -45 },
-      "title": "Aeroporto",
-      "sort": { "field": "delayRate", "order": "descending" }
+  "vconcat": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "AeroportoOrigem",
+          "type": "nominal",
+          "axis": { "labelAngle": -45 },
+          "title": "Aeroporto",
+          "sort": { "field": "delayRate", "order": "descending" }
+        },
+        "y": {
+          "field": "meanDelay",
+          "type": "quantitative",
+          "title": "Atraso médio (min)"
+        },
+        "color": { "field": "AeroportoOrigem", "type": "nominal", "legend": null },
+        "tooltip": [
+          { "field": "AeroportoOrigem", "type": "nominal", "title": "Aeroporto" },
+          {
+            "field": "delayRate",
+            "type": "quantitative",
+            "title": "Taxa de Atraso (%)",
+            "format": ".2f"
+          },
+          {
+            "field": "delayedCount",
+            "type": "quantitative",
+            "title": "Total de Voos Atrasados"
+          },
+          {
+            "field": "totalCount",
+            "type": "quantitative",
+            "title": "Total de Voos"
+          },
+          {
+            "field": "meanDelay",
+            "type": "quantitative",
+            "title": "Tempo médio de atraso (min)",
+            "format": ".0f"
+          }
+        ]
+      },
+      "width": 500,
+      "height": 300
     },
-    "y": {
-      "field": "meanDelay",
-      "type": "quantitative",
-      "title": "Atraso médio (min)"
-    },
-    "color": { "field": "AeroportoOrigem", "type": "nominal", "legend": null },
-    "tooltip": [
-      { "field": "AeroportoOrigem", "type": "nominal", "title": "Aeroporto" },
-      {
-        "field": "delayRate",
-        "type": "quantitative",
-        "title": "Taxa de Atraso (%)",
-        "format": ".2f"
-      },
-      {
-        "field": "delayedCount",
-        "type": "quantitative",
-        "title": "Total de Voos Atrasados"
-      },
-      {
-        "field": "totalCount",
-        "type": "quantitative",
-        "title": "Total de Voos"
-      },
-      {
-        "field": "meanDelay",
-        "type": "quantitative",
-        "title": "Tempo médio de atraso (min)",
-        "format": ".0f"
-      }
-    ]
-  },
-  "width": 500,
-  "height": 300
+    {
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "fill": "#f0f0f0",
+            "stroke": "#ccc",
+            "strokeWidth": 1,
+            "cornerRadius": 5
+          },
+          "encoding": {
+            "x": { "value": 0 },
+            "y": { "value": 0 },
+            "width": { "value": 500 },
+            "height": { "value": 120 }
+          }
+        },
+        {
+          "mark": { "type": "text", "align": "left", "baseline": "top", "lineBreak": "\n" },
+          "encoding": {
+            "text": {
+              "value": "A motivação da escolha dessa visualização é porquê o gráfico de barras consegue descrever melhor para o usuário a relação de quantidade, onde o \n tamanho da barra é de acordo o atraso médio em minutos. Ou seja, quanto maior for o atraso em minutos, maior será o tamanho da barra e vice-versa.\n\nCom esse gráfico podemos obter as informações sobre os aeroportos que tem maior atraso médio por minutos, onde é feito uma média de todos os minutos \n acrescido para cada aeroporto. Com isso, podemos notar que o aeroporto Houston tem o maior atraso médio em minutos em comparação aos outros."
+            },
+            "x": { "value": 10 },
+            "y": { "value": 10 }
+          }
+        }
+      ],
+      "width": 800,
+      "height": 150
+    }
+  ]
 }
